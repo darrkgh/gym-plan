@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="45 歲增肌減脂課表：一週三練全身，每次約 60 分鐘，第 1 個月 4 週進程，每個動作附 YouTube 示範。">
+<title>三練重塑計畫</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap">
+<style>
+/* Layout: one-column training log; each day is coded by an Olympic plate colour
+   (red 25 = A squat day, blue 20 = B deadlift day, yellow 15 = C bench day, green 10 = warm-up / cool-down).
+   A sticky week switcher rewrites every sets × reps figure for weeks 1–4. */
+:root{
+  --bg:#EDF0EF; --surface:#FFFFFF; --ink:#151D1B; --muted:#55615D; --line:#D4DBD8; --chip:#E1E7E4;
+  --red:#C9302A; --blue:#2457B5; --yellow:#E2A400; --green:#2F8A57;
+  --red-ink:#AE2620; --blue-ink:#1D4A9C; --yellow-ink:#7F5A00; --green-ink:#226F47;
+  --tint:#F4F7F6; --warn:#F8E6E4;
+  --font-display:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  --font-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  --font-num:"Barlow Condensed","Arial Narrow","Noto Sans TC",sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F1513; --surface:#171F1D; --ink:#E3EAE7; --muted:#9BA9A4; --line:#29342F; --chip:#212B28;
+    --red-ink:#F2817A; --blue-ink:#8DB2F6; --yellow-ink:#F0C24A; --green-ink:#6CCB94;
+    --tint:#1C2522; --warn:#2E1A19;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F1513; --surface:#171F1D; --ink:#E3EAE7; --muted:#9BA9A4; --line:#29342F; --chip:#212B28;
+  --red-ink:#F2817A; --blue-ink:#8DB2F6; --yellow-ink:#F0C24A; --green-ink:#6CCB94;
+  --tint:#1C2522; --warn:#2E1A19;
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:17px;line-height:1.7;-webkit-font-smoothing:antialiased}
+.wrap{max-width:880px;margin:0 auto;padding-inline:16px}
+h1,h2,h3,h4{font-family:var(--font-display);text-wrap:balance;margin:0;line-height:1.3}
+p{margin:0}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px;border-radius:4px}
+.num{font-family:var(--font-num);font-variant-numeric:tabular-nums}
+
+/* ---------- hero ---------- */
+.hero{padding-block:40px 28px;display:grid;gap:20px}
+.eyebrow{font-family:var(--font-num);font-weight:600;font-size:15px;letter-spacing:.12em;color:var(--muted)}
+.hero h1{font-size:clamp(34px,7vw,52px);font-weight:900;letter-spacing:.02em}
+.lead{max-width:42em}
+
+.weekgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.wd{border-radius:10px;padding:8px 4px;text-align:center;background:var(--chip);color:var(--muted);font-size:14px;display:grid;gap:2px;min-width:0}
+.wd b{font-family:var(--font-num);font-size:22px;line-height:1.1;color:var(--ink)}
+.wd.on{color:#fff}
+.wd.on b{color:#fff}
+.wd.a{background:var(--red)}
+.wd.b{background:var(--blue)}
+.wd.c{background:var(--yellow);color:#1d1600}
+.wd.c b{color:#1d1600}
+.hint{font-size:15px;color:var(--muted)}
+
+.session{display:grid;gap:6px}
+.s-bar{display:flex;height:40px;border-radius:10px;overflow:hidden;font-weight:700;font-size:14px}
+.s-bar span{display:flex;align-items:center;justify-content:center;color:#fff;white-space:nowrap;min-width:0;padding-inline:4px}
+.s-w{flex:8;background:var(--green)}
+.s-m{flex:45;background:var(--ink);color:var(--bg) !important}
+.s-c{flex:5;background:var(--green)}
+.s-f{flex:5;background:repeating-linear-gradient(135deg,var(--chip) 0 6px,var(--line) 6px 12px);color:var(--muted) !important}
+.s-ticks{position:relative;height:20px;font-family:var(--font-num);font-size:15px;color:var(--muted)}
+.s-ticks span{position:absolute;transform:translateX(-50%)}
+.s-ticks span:first-child{transform:none}
+.s-ticks span:last-child{transform:translateX(-100%)}
+
+/* ---------- sticky bar ---------- */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:color-mix(in srgb,var(--bg) 93%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.bar .wrap{display:grid;gap:8px;padding-block:10px}
+.weeks{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;background:var(--chip);border-radius:12px;padding:4px}
+.weeks button{font:inherit;border:0;background:transparent;color:var(--ink);border-radius:9px;padding:6px 4px;cursor:pointer;display:grid;gap:0;line-height:1.25}
+.weeks button b{font-family:var(--font-num);font-size:17px}
+.weeks button span{font-size:13px;color:var(--muted)}
+.weeks button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.weeks button[aria-pressed="true"] span{color:inherit;opacity:.8}
+.jumps{display:flex;align-items:center;gap:6px;overflow-x:auto;scrollbar-width:none}
+.jumps::-webkit-scrollbar{display:none}
+.jumps a{flex:none;text-decoration:none;font-size:14px;font-weight:500;padding:4px 11px;border-radius:999px;background:var(--chip);display:flex;align-items:center;gap:6px}
+.jumps a:hover{background:var(--line)}
+.dot{width:9px;height:9px;border-radius:50%;flex:none}
+.reset{flex:none;margin-left:auto;font:inherit;font-size:13px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:3px 10px;cursor:pointer}
+
+/* ---------- sections ---------- */
+main{display:grid;gap:56px;padding-block:32px 64px}
+section{display:grid;gap:18px;scroll-margin-top:130px}
+.sec-head{display:flex;align-items:center;gap:16px}
+.plate{--c:var(--red);flex:none;width:64px;height:64px;border-radius:50%;display:grid;place-items:center;color:#fff;text-align:center;
+  background:radial-gradient(circle,var(--c) 0 54%,color-mix(in srgb,var(--c) 70%,#000) 54% 58%,var(--c) 58% 100%);
+  box-shadow:inset 0 0 0 3px color-mix(in srgb,var(--c) 75%,#000)}
+.plate span{font-family:var(--font-num);font-weight:700;font-size:26px;line-height:1;display:block}
+.plate small{display:block;font-size:11px;font-weight:700;line-height:1;margin-top:2px}
+.plate.blue{--c:var(--blue)}
+.plate.yellow{--c:var(--yellow);color:#1d1600}
+.plate.green{--c:var(--green)}
+.sec-head h2{font-size:clamp(24px,4.5vw,30px);font-weight:900}
+.sec-head p{color:var(--muted);font-size:15px}
+
+.weekcard{background:var(--surface);border:2px solid var(--ink);border-radius:14px;padding:16px 18px;display:grid;gap:8px}
+.weekcard .top{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.weekcard h3{font-size:20px;font-weight:900}
+.rir{font-family:var(--font-num);font-weight:700;font-size:18px;background:var(--ink);color:var(--bg);border-radius:6px;padding:0 8px}
+.weekcard ul{margin:0;padding-left:1.2em;display:grid;gap:2px}
+
+.box{border-radius:12px;padding:16px 18px;display:grid;gap:8px;min-width:0}
+.box h3{font-size:17px}
+.box ul,.box ol{margin:0;padding-left:1.3em;display:grid;gap:4px}
+.box.info{background:var(--surface);border:1px solid var(--line)}
+.box.warn{background:var(--warn)}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:12px}
+
+/* exercise list */
+.exlist{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.ex{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:grid;gap:10px;min-width:0}
+.ex.done{opacity:.6}
+.ex-top{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:start}
+.ex-no{font-family:var(--font-num);font-weight:700;font-size:22px;line-height:1.3;min-width:2ch;color:var(--muted)}
+.ex-title{min-width:0;display:grid;gap:2px}
+.ex-title h3{font-size:19px;font-weight:700}
+.en{font-family:var(--font-num);font-weight:500;font-size:16px;color:var(--muted);letter-spacing:.02em}
+.rx{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 16px;font-size:15px;color:var(--muted)}
+.rx .wk{font-family:var(--font-num);font-weight:700;font-size:24px;color:var(--ink);font-variant-numeric:tabular-nums;transition:color .3s}
+.rx .wk.flash{color:var(--red-ink)}
+.cue{max-width:44em}
+.note{background:var(--tint);border-radius:8px;padding:8px 12px;font-size:16px}
+.tag{display:inline-block;font-family:var(--font-num);font-size:14px;font-weight:700;line-height:1;padding:4px 7px;border-radius:6px;background:var(--ink);color:var(--bg);margin-right:6px;vertical-align:2px;white-space:nowrap}
+.links{display:flex;flex-wrap:wrap;gap:8px}
+.vid{display:inline-flex;align-items:center;gap:10px;text-decoration:none;border:1.5px solid var(--ink);border-radius:999px;padding:5px 14px 5px 7px;font-weight:700;font-size:15px;max-width:100%}
+.vid:hover{background:var(--ink);color:var(--surface)}
+.vid:hover .src{color:inherit}
+.vid .play{width:26px;height:26px;border-radius:50%;background:var(--red);flex:none;display:grid;place-items:center}
+.vid .play::before{content:"";border-left:9px solid #fff;border-top:6px solid transparent;border-bottom:6px solid transparent;margin-left:2px}
+.vid .src{font-weight:400;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+
+.tick{position:relative;width:30px;height:30px;flex:none;cursor:pointer}
+.tick input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer}
+.tick span{position:absolute;inset:0;border:2px solid var(--line);border-radius:8px;background:var(--surface)}
+.tick input:checked + span{background:var(--green);border-color:var(--green)}
+.tick input:checked + span::after{content:"";position:absolute;left:9px;top:4px;width:7px;height:13px;border:solid #fff;border-width:0 3px 3px 0;transform:rotate(45deg)}
+.tick input:focus-visible + span{outline:3px solid var(--blue);outline-offset:2px}
+
+.block{display:grid;gap:10px}
+.block-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.letter{font-family:var(--font-num);font-weight:700;font-size:15px;color:#fff;background:var(--c,var(--red));border-radius:6px;padding:2px 9px;letter-spacing:.06em}
+.block-head h4{font-size:18px}
+.block-head .t{font-size:15px;color:var(--muted)}
+.day-a{--c:var(--red)} .day-b{--c:var(--blue)} .day-c{--c:var(--yellow)}
+.day-c .letter{color:#1d1600}
+
+.cool{background:var(--surface);border:1px dashed var(--line);border-radius:12px;padding:14px 16px;display:grid;gap:8px}
+.cool h4{font-size:16px;color:var(--green-ink)}
+.mini{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.mini li{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.mini a{font-size:14px;font-weight:700;text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:2px 10px;white-space:nowrap}
+.mini a:hover{border-color:var(--ink)}
+
+/* table */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:680px;font-size:16px}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:14px;font-weight:700;color:var(--muted);letter-spacing:.04em}
+tr:last-child td{border-bottom:0}
+td .num{font-size:19px;font-weight:700}
+tr.cur td{background:var(--tint)}
+tr.cur td:first-child{box-shadow:inset 4px 0 0 var(--ink)}
+.vol{min-width:420px}
+.vol td:nth-child(2){font-family:var(--font-num);font-size:19px;font-weight:700}
+
+.fmla{font-family:var(--font-num);font-size:20px;font-weight:700}
+footer{border-top:1px solid var(--line);padding-block:24px 40px;color:var(--muted);font-size:14px;display:grid;gap:6px}
+
+@media (max-width:480px){
+  body{font-size:16px}
+  .ex{padding:14px}
+  .wd{font-size:12px;padding:6px 2px}
+  .wd b{font-size:19px}
+  .weeks button span{font-size:12px}
+}
+@media (prefers-reduced-motion:reduce){.rx .wk{transition:none}}
+/* standalone reset */
+html{-webkit-text-size-adjust:100%}
+body{margin:0}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+</style>
+</head>
+<body>
+
+<header class="wrap hero">
+  <div class="eyebrow">45 歲 · 一週三練 · 每次 60 分鐘 · 增肌減脂 · 第 1 個月</div>
+  <h1>三練重塑計畫</h1>
+  <p class="lead">給有健身習慣、目標是增肌減脂的你。一週練三次全身，每次約 60 分鐘，每個肌群一週練到 2–3 次。課表不含有氧慢跑。用上方的週次按鈕切換第 1–4 週，所有組數和次數會跟著改變。</p>
+  <div class="weekgrid" aria-label="一週安排">
+    <div class="wd a on"><b>A</b>週一</div>
+    <div class="wd">休</div>
+    <div class="wd b on"><b>B</b>週三</div>
+    <div class="wd">休</div>
+    <div class="wd c on"><b>C</b>週五</div>
+    <div class="wd">休</div>
+    <div class="wd">休</div>
+  </div>
+  <p class="hint">也可以排週二、四、六。兩次訓練之間至少隔一天，順序固定 A → B → C。</p>
+  <div class="session" aria-label="每次訓練的時間分配">
+    <div class="s-bar"><span class="s-w">暖身</span><span class="s-m">主訓練 約 45 分</span><span class="s-c">收操</span><span class="s-f">選做</span></div>
+    <div class="s-ticks num"><span style="left:0">0′</span><span style="left:12.7%">8′</span><span style="left:84.1%">53′</span><span style="left:100%">63′</span></div>
+  </div>
+</header>
+
+<div class="bar">
+  <div class="wrap">
+    <div class="weeks" role="group" aria-label="選擇週次">
+      <button type="button" data-week="1" aria-pressed="true"><b>第 1 週</b><span>適應</span></button>
+      <button type="button" data-week="2" aria-pressed="false"><b>第 2 週</b><span>累積</span></button>
+      <button type="button" data-week="3" aria-pressed="false"><b>第 3 週</b><span>推進</span></button>
+      <button type="button" data-week="4" aria-pressed="false"><b>第 4 週</b><span>減量</span></button>
+    </div>
+    <nav class="jumps" aria-label="章節">
+      <a href="#warmup"><span class="dot" style="background:var(--green)"></span>暖身</a>
+      <a href="#day-a"><span class="dot" style="background:var(--red)"></span>A 深蹲日</a>
+      <a href="#day-b"><span class="dot" style="background:var(--blue)"></span>B 硬舉日</a>
+      <a href="#day-c"><span class="dot" style="background:var(--yellow)"></span>C 臥推日</a>
+      <a href="#month">4 週進程</a>
+      <a href="#food">飲食與恢復</a>
+      <button type="button" class="reset" id="resetBtn">清除勾選</button>
+    </nav>
+  </div>
+</div>
+
+<main class="wrap">
+
+<!-- ================= THIS WEEK ================= -->
+<div class="weekcard" id="weekcard" aria-live="polite">
+  <div class="top"><h3 id="wk-title">第 1 週 · 適應週</h3><span class="rir" id="wk-rir">RIR 3</span></div>
+  <ul id="wk-list">
+    <li>每組做完都還能再做 3 下（RIR 3），先別拚重量。</li>
+    <li>主項做 3 組，其他動作做組數下限。</li>
+    <li>找出每個動作的工作重量並記下來。新課表的第一週會比較痠，正常。</li>
+  </ul>
+</div>
+
+<!-- ================= WARM-UP ================= -->
+<section id="warmup">
+  <div class="sec-head">
+    <div class="plate green"><div><span>8</span><small>分鐘</small></div></div>
+    <div><h2>暖身</h2><p>每次訓練都做，三天相同</p></div>
+  </div>
+  <ol class="exlist">
+    <li class="ex">
+      <div class="ex-top"><span class="ex-no">1</span><div class="ex-title"><h3>划船機或飛輪</h3><span class="en">General Warm-up</span></div><label class="tick"><input type="checkbox" id="c-w1" aria-label="完成：划船機或飛輪"><span></span></label></div>
+      <div class="rx"><span><b class="wk">3 分鐘</b></span><span>輕鬆、微喘</span></div>
+      <p class="cue">只是讓體溫上升、關節潤滑，不算有氧訓練，強度保持在能說話的程度。</p>
+    </li>
+    <li class="ex">
+      <div class="ex-top"><span class="ex-no">2</span><div class="ex-title"><h3>世界最偉大伸展</h3><span class="en">World's Greatest Stretch</span></div><label class="tick"><input type="checkbox" id="c-w2" aria-label="完成：世界最偉大伸展"><span></span></label></div>
+      <div class="rx"><span>每側 <b class="wk">3 下</b></span></div>
+      <p class="cue">一個動作同時打開髖屈肌、腿後側和胸椎旋轉，45 歲以後最划算的熱身。</p>
+      <div class="links"><a class="vid" href="https://www.youtube.com/watch?v=YhH9aVMgPU4" target="_blank" rel="noopener"><span class="play"></span>看示範<span class="src">全人物理治療所 · 4:54</span></a></div>
+    </li>
+    <li class="ex">
+      <div class="ex-top"><span class="ex-no">3</span><div class="ex-title"><h3>貓牛式</h3><span class="en">Cat-Cow</span></div><label class="tick"><input type="checkbox" id="c-w3" aria-label="完成：貓牛式"><span></span></label></div>
+      <div class="rx"><span><b class="wk">6 下</b></span><span>跟著呼吸慢慢做</span></div>
+      <div class="links"><a class="vid" href="https://www.youtube.com/watch?v=nGFe2xwdTB8" target="_blank" rel="noopener"><span class="play"></span>看示範<span class="src">全人物理治療所 · 4:01</span></a></div>
+    </li>
+    <li class="ex">
+      <div class="ex-top"><span class="ex-no">4</span><div class="ex-title"><h3>彈力帶肩膀熱身</h3><span class="en">Band Shoulder Prep</span></div><label class="tick"><input type="checkbox" id="c-w4" aria-label="完成：彈力帶肩膀熱身"><span></span></label></div>
+      <div class="rx"><span>每個動作 <b class="wk">10 下</b></span></div>
+      <p class="cue">拉開、繞肩、外旋。B 日和 C 日有推舉，這一步特別不要省。</p>
+      <div class="links"><a class="vid" href="https://www.youtube.com/watch?v=T5-tyCnA7O0" target="_blank" rel="noopener"><span class="play"></span>看示範<span class="src">Coach Duncan · 1:01</span></a></div>
+    </li>
+    <li class="ex">
+      <div class="ex-top"><span class="ex-no">5</span><div class="ex-title"><h3>主項熱身組</h3><span class="en">Ramp-up Sets</span></div><label class="tick"><input type="checkbox" id="c-w5" aria-label="完成：主項熱身組"><span></span></label></div>
+      <div class="rx"><span class="num" style="font-size:19px;font-weight:700;color:var(--ink)">空槓 ×10 → 40% ×8 → 60% ×5 → 75% ×3 → 85% ×1</span></div>
+      <p class="cue">百分比指的是當天正式組的重量。做完就直接開始主項 A 的正式組。</p>
+      <div class="links"><a class="vid" href="https://www.youtube.com/watch?v=0JqOkUuGN7Y" target="_blank" rel="noopener"><span class="play"></span>熱身組怎麼排<span class="src">Jay Wang · 5:49</span></a></div>
+    </li>
+  </ol>
+</section>
+
+<!-- ================= DAY A ================= -->
+<section id="day-a" class="day-a">
+  <div class="sec-head">
+    <div class="plate"><div><span>A</span><small>週一</small></div></div>
+    <div><h2>A 深蹲日</h2><p>蹲 ＋ 上斜推 ＋ 水平拉 · 約 55 分鐘</p></div>
+  </div>
+
+  <div class="block">
+    <div class="block-head"><span class="letter">A</span><h4>主項</h4><span class="t">組間休息 2–3 分鐘</span></div>
+    <ol class="exlist">
+      <li class="ex">
+        <div class="ex-top"><span class="ex-no">A</span><div class="ex-title"><h3>槓鈴背蹲</h3><span class="en">Back Squat</span></div><label class="tick"><input type="checkbox" id="c-a1" aria-label="完成：槓鈴背蹲"><span></span></label></div>
+        <div class="rx"><span><b class="wk" data-w1="3 × 8" data-w2="4 × 6–8" data-w3="4 × 6–8" data-w4="3 × 5">3 × 8</b></span><span>休息 2–3 分</span></div>
+        <p class="cue">槓放在上背斜方肌上，吸飽氣撐住核心再往下蹲，蹲到大腿至少與地面平行。起身時膝蓋和腳尖同方向，不要內夾。</p>
+        <p class="note"><span class="tag">45+</span>深蹲架的安全槓每次都要設好。膝蓋或下背不舒服時，改做安全槓深蹲（SSB）或高腳杯深蹲。</p>
+        <div class="links"><a class="vid" href="https://www.youtube.com/watch?v=JLG9X2Bcf_o" target="_blank" rel="noopener"><span class="play"></span>看示範<span class="src">健人蓋伊 · 6:33</span></a></div>
+      </li>
+    </ol>
+  </div>
+
+  <div class="block">
+    <div class="block-head"><span class="letter">B</span><h4>次要複合動作</h4><span class="t">組間休息 90 秒</span></div>
+    <ol class="exlist">
+      <li class="ex">
+        <div class="ex-top"><span class="ex-no">B</span><div class="ex-title"><h3>上斜啞鈴臥推</h3><span class="en">Incline Dumbbell Press</span></div><label class="tick"><input type="checkbox" id="c-a2" aria-label="完成：上斜啞鈴臥推"><span></span></label></div>
+        <div class="rx"><span><b class="wk" data-w1="2 × 10" data-w2="3 × 8–10" data-w3="3 × 8–10" data-w4="2 × 8">2 × 10</b></span><span>休息 90 秒</span></div>
+        <p class="cue">椅背調 30 度左右，太高會變成練肩。啞鈴下放到上胸兩側，手肘約 45–60 度，推起時兩顆啞鈴往中間靠攏。</p>
+        <div class="links"><a class="vid" href="https://www.youtube.com/watch?v=BTLUiliVG9s" target="_blank" rel="noopener"><span class="play"></span>看示範<span class="src">Jay Wang · 5:25</span></a></div>
+      </li>
+    </ol>
+  </div>
+
+  <div class="block">
+    <div class="block-head"><span class="letter">C</span><h4>超級組：C1 → C2</h4><span class="t">兩個動作連著做，一輪後休息 60–75 秒</span></div>
+    <ol class="exlist">
+      <li class="ex">
+        <div class="ex-top"><span class="ex-no">C1</span><div class="ex-title"><h3>坐姿滑輪划船</h3><span class="en">Seated Cable Row</span></div><label class="tick"><input type="checkbox" id="c-a3" aria-label="完成：坐姿滑輪划船"><span></span></label></div>
+        <div class="rx"><span><b class="wk" data-w1="2 × 12" data-w2="3 × 10–12" data-w3="3 × 10–12" data-w4="2 × 10">2 × 12</b></span></div>
+        <p class="cue">胸口挺起，往後拉到上腹，手肘貼近身體，停 1 秒再慢慢放回，讓肩胛骨往前伸展。</p>
+        <div class="links"><a class="vid" href="https://www.youtube.com/watch?v=qbyJvJBTLfg" target="_blank" rel="noopener"><span class="play"></span>看示範<span class="src">林勁瑋 大腦優先教練學院 · 6:58</span></a></div>
+      </li>
+      <li class="ex">
+        <div class="ex-top"><span class="ex-no">C2</span><div class="ex-title"><h3>腿後彎舉</h3><span class="en">Leg Curl</span></div><label class="tick"><input type="checkbox" id="c-a4" aria-label="完成：腿後彎舉"><span></span></label></div>
+        <div class="rx"><span><b class="wk" data-w1="2 × 12" data-w2="3 × 10–12" data-w3="3 × 10–12 末組力竭" data-w4="2 × 10">2 × 12</b></span></div>
+        <p class="cue">俯臥或坐姿腿彎舉機都可以。腳跟往屁股方向勾，頂點停 1 秒，放下時用 2–3 秒慢慢控制。</p>
+        <div class="links"><a class="vid" href="https://www.youtube.com/watch?v=IVfAcBwgaik" target="_blank" rel="noopener"><span class="play"></span>看示範<span class="src">Women's Health Taiwan · 1:15</span></a></div>
+      </li>
+    </ol>
+  </div>
+
+  <div class="block">
+    <div class="block-head"><span class="letter">D</span><h4>超級組：D1 → D2</h4><span class="t">一輪後休息 45–60 秒</span></div>
+    <ol class="exlist">
+      <li class="ex">
+        <div class="ex-top"><span class="ex-no">D1</span><div class="ex-title"><h3>啞鈴側平舉</h3><span class="en">Dumbbell Lateral Raise</span></div><label class="tick"><input type="checkbox" id="c-a5" aria-label="完成：啞鈴側平舉"><span></span></label></div>
+        <div class="rx"><span><b class="wk" data-w1="2 × 15" data-w2="3 × 12–15" data-w3="3 × 12–15 末組力竭" data-w4="2 × 12">2 × 15</b></span></div>
+        <p class="cue">用輕重量。手肘微彎，往兩側「推開」到與肩同高，不要聳肩、不要甩身體。</p>
+        <div class="links"><a class="vid" href="https://www.youtube.com/watch?v=G0HBr7tJH0I" target="_blank" rel="noopener"><span class="play"></span>看示範<span class="src">Gandy · 3:35</span></a></div>
+      </li>
+      <li class="ex">
+        <div class="ex-top"><span class="ex-no">D2</span><div class="ex-title"><h3>滑輪三頭下壓</h3><span class="en">Cable Triceps Pushdown</span></div><label class="tick"><input type="checkbox" id="c-a6" aria-label="完成：滑輪三頭下壓"><span></span></label></div>
+        <div class="rx"><span><b class="wk" data-w1="2 × 15" data-w2="3 × 12–15" data-w3="3 × 12–15 末組力竭" data-w4="2 × 12">2 × 15</b></span></div>
+        <p class="cue">手肘固定在身體兩側，只動前臂，往下壓到手臂打直停 1 秒。</p>
+        <div class="links"><a class="vid" href="https://www.youtube.com/watch?v=9gLmTRBa-bE" target="_blank" rel="noopener"><span class="play"></span>看示範<span class="src">CYFIT兆佑 · 4:01</span></a></div>
+      </li>
+    </ol>
+  </div>
+
+  <div class="block">
+    <div class="block-head"><span class="letter">E</span><h4>核心</h4><span class="t">組間休息 45 秒</span></div>
+    <ol class="exlist">
+      <li class="ex">
+        <div class="ex-top"><span class="ex-no">E</span><div class="ex-title"><h3>懸吊抬腿</h3><span class="en">Hanging Leg Raise</span></div><label class="tick"><input type="checkbox" id="c-a7" aria-label="完成：懸吊抬腿"><span></span></label></div>
+        <div class="rx"><span><b class="wk" data-w1="2 × 10" data-w2="3 × 10–12" data-w3="3 × 10–12" data-w4="2 × 10">2 × 10</b></span></div>
+        <p class="cue">吊在單槓上，用腹肌把骨盆往上捲，不要靠甩。太難就先做屈膝版。</p>
+        <div class="links"><a class="vid" href="https://www.youtube.com/watch?v=982Mwu_MqeQ" target="_blank" rel="noopener"><span class="play"></span>看示範<span class="src">Fitting Room TW · 4:36</span></a></div>
+      </li>
+    </ol>
+  </div>
+
+  <div class="cool">
+    <h4>收操 5 分鐘 · 每個伸展 30–45 秒</h4>
+    <ul class="mini">
+      <li><span>沙發伸展（大腿前側）</span><a href="https://www.youtube.com/watch?v=YbUTLWdY9nw" target="_blank" rel="noopener">▶ 0:45</a></li>
+      <li><span>胸大肌伸展（門框）</span><a href="https://www.youtube.com/watch?v=E5HTUT0AlVw" target="_blank" rel="noopener">▶ 2:31</a></li>
+      <li><span>嬰兒式</span><a href="https://www.youtube.com/watch?v=XHFeeRSib18" target="_blank" rel="noopener">▶ 3:36</a></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= DAY B ================= -->
+<section id="day-b" class="day-b">
+  <div class="sec-head">
+    <div class="plate blue"><div><span>B</span><small>週三</small></div></div>
+    <div><h2>B 硬舉日</h2><p>髖鉸鏈 ＋ 垂直拉 ＋ 垂直推 · 約 55 分鐘</p></div>
+  </div>
+
+  <div class="block">
+    <div class="block-head"><span class="letter">A</span><h4>主項</h4><span class="t">組間休息 2–3 分鐘</span></div>
+    <ol class="exlist">
+      <li class="ex">
+        <div class="ex-top"><span class="ex-no">A</span><div class="ex-title"><h3>六角槓硬舉</h3><span class="en">Trap Bar Deadlift</span></div><label class="tick"><input type="checkbox" id="c-b1" aria-label="完成：六角槓硬舉"><span></span></label></div>
+        <div class="rx"><span><b class="wk" data-w1="3 × 6" data-w2="4 × 5–6" data-w3="4 × 5–6" data-w4="3 × 4">3 × 6</b></span><span>休息 2–3 分</span></div>
+        <p class="cue">站在六角槓中間，屁股往後、背打平，抓住握把後「把地板推開」站起來。每一下都把槓放回地上重新設定，不要連續彈跳。</p>
+        <p class="note"><span class="tag">45+</span>六角槓的重心在身體正中間，下背壓力比傳統硬舉小。健身房沒有六角槓就做傳統硬舉，組數次數不變。</p>
+        <div class="links">
+          <a class="vid" href="https://www.youtube.com/watch?v=4-__MZA0I6U" target="_blank" rel="noopener"><span class="play"></span>看示範<span class="src">林勁瑋 · 7:42</span></a>
+          <a class="vid" href="https://www.youtube.com/watch?v=mGyKvmE7_Zc" target="_blank" rel="noopener"><span class="play"></span>傳統硬舉<span class="src">健人蓋伊 · 6:30</span></a>
+        </div>
+      </li>
+    </ol>
+  </div>
+
+  <div class="block">
+    <div class="block-head"><span class="letter">B</span><h4>次要複合動作</h4><span class="t">組間休息 2 分鐘</span></div>
+    <ol class="exlist">
+      <li class="ex">
+        <div class="ex-top"><span class="ex-no">B</span><div class="ex-title"><h3>引體向上</h3><span class="en">Pull-up</span></div><label class="tick"><input type="checkbox" id="c-b2" aria-label="完成：引體向上"><span></span></label></div>
+        <div class="rx"><span><b class="wk" data-w1="3 × 6–8" data-w2="4 × 6–10" data-w3="4 × 6–10" data-w4="2 × 6">3 × 6–8</b></span><span>休息 2 分</span></div>
+        <p class="cue">從手臂完全伸直開始，胸口往單槓拉，下巴過槓。做不到 6 下就改做滑輪下拉，每組 8–10 下；能輕鬆做 10 下以上就掛重量。</p>
+        <div class="links">
+          <a class="vid" href="https://www.youtube.com/watch?v=71UofCP10lc" target="_blank" rel="noopener"><span class="play"></span>看示範<span class="src">健人蓋伊 · 5:55</span></a>
+          <a class="vid" href="https://www.youtube.com/watch?v=U6VJCl0CRno" target="_blank" rel="noopener"><span class="play"></span>滑輪下拉<span class="src">林勁瑋 · 8:33</span></a>
+        </div>
+      </li>
+    </ol>
+  </div>
+
+  <div class="block">
+    <div class="block-head"><span class="letter">C</span><h4>超級組：C1 → C2</h4><span class="t">一輪後休息 75–90 秒</span></div>
+    <ol class="exlist">
+      <li class="ex">
+        <div class="ex-top"><span class="ex-no">C1</span><div class="ex-title"><h3>坐姿啞鈴肩推</h3><span class="en">Seated Dumbbell Press</span></div><label class="tick"><input type="checkbox" id="c-b3" aria-label="完成：坐姿啞鈴肩推"><span></span></label></div>
+        <div class="rx"><span><b class="wk" data-w1="2 × 10" data-w2="3 × 8–10" data-w3="3 × 8–10" data-w4="2 × 8">2 × 10</b></span></div>
+        <p class="cue">椅背調到接近垂直（約 80 度），啞鈴從耳朵高度推到頭頂上方，下背不要拱離椅背。</p>
+        <div class="links"><a class="vid" href="https://www.youtube.com/watch?v=q4PT0UHyW9Q" target="_blank" rel="noopener"><span class="play"></span>看示範<span class="src">Kun阿錕 · 3:48</span></a></div>
+      </li>
+      <li class="ex">
+        <div class="ex-top"><span class="ex-no">C2</span><div class="ex-title"><h3>保加利亞分腿蹲</h3><span class="en">Bulgarian Split Squat</span></div><label class="tick"><input type="checkbox" id="c-b4" aria-label="完成：保加利亞分腿蹲"><span></span></label></div>
+        <div class="rx"><span><b class="wk" data-w1="2 × 8 /側" data-w2="3 × 8–10 /側" data-w3="3 × 8–10 /側" data-w4="2 × 8 /側">2 × 8 /側</b></span></div>
+        <p class="cue">後腳腳背放在臥推椅上，前腳往前站一大步，雙手各拿一顆啞鈴。上身微微前傾偏練臀，直立偏練大腿前側。</p>
+        <div class="links"><a class="vid" href="https://www.youtube.com/watch?v=HPfpii2-4ro" target="_blank" rel="noopener"><span class="play"></span>看示範<span class="src">女力健身 · 5:25</span></a></div>
+      </li>
+    </ol>
+  </div>
+
+  <div class="block">
+    <div class="block-head"><span class="letter">D</span><h4>超級組：D1 → D2</h4><span class="t">一輪後休息 45–60 秒</span></div>
+    <ol class="exlist">
+      <li class="ex">
+        <div class="ex-top"><span class="ex-no">D1</span><div class="ex-title"><h3>滑輪面拉</h3><span class="en">Cable Face Pull</span></div><label class="tick"><input type="checkbox" id="c-b5" aria-label="完成：滑輪面拉"><span></span></label></div>
+        <div class="rx"><span><b class="wk" data-w1="2 × 15" data-w2="3 × 15" data-w3="3 × 15–20" data-w4="2 × 15">2 × 15</b></span></div>
+        <p class="cue">滑輪調到略高於眼睛，往臉的方向拉，同時把雙手往外分開。練後三角肌、保養肩膀，推的動作多的人一定要做。</p>
+        <div class="links"><a class="vid" href="https://www.youtube.com/watch?v=PFHBbjGErfA" target="_blank" rel="noopener"><span class="play"></span>看示範<span class="src">Kun阿錕 · 2:08</span></a></div>
+      </li>
+      <li class="ex">
+        <div class="ex-top"><span class="ex-no">D2</span><div class="ex-title"><h3>繩索錘式彎舉</h3><span class="en">Cable Rope Hammer Curl</span></div><label class="tick"><input type="checkbox" id="c-b6" aria-label="完成：繩索錘式彎舉"><span></span></label></div>
+        <div class="rx"><span><b class="wk" data-w1="2 × 12" data-w2="3 × 10–12" data-w3="3 × 10–12 末組力竭" data-w4="2 × 10">2 × 12</b></span></div>
+        <p class="cue">繩索把手、拇指朝上，手肘固定在身體兩側往上彎舉。練到肱肌和肱橈肌，手臂看起來會更粗。</p>
+        <div class="links"><a class="vid" href="https://www.youtube.com/watch?v=IWu_vf_0tfo" target="_blank" rel="noopener"><span class="play"></span>看示範<span class="src">虎尾科大體適能中心 · 0:17</span></a></div>
+      </li>
+    </ol>
+  </div>
+
+  <div class="block">
+    <div class="block-head"><span class="letter">E</span><h4>核心與握力</h4><span class="t">走完休息 60 秒</span></div>
+    <ol class="exlist">
+      <li class="ex">
+        <div class="ex-top"><span class="ex-no">E</span><div class="ex-title"><h3>農夫走路</h3><span class="en">Farmer's Carry</span></div><label class="tick"><input type="checkbox" id="c-b7" aria-label="完成：農夫走路"><span></span></label></div>
+        <div class="rx"><span><b class="wk" data-w1="2 × 30 公尺" data-w2="3 × 30 公尺" data-w3="3 × 30 公尺 加重" data-w4="2 × 30 公尺">2 × 30 公尺</b></span><span>每手約體重的 1/4–1/3</span></div>
+        <p class="cue">抬頭挺胸、肩膀下沉，小步穩穩走。同時練握力、上背和核心抗側彎。</p>
+        <div class="links"><a class="vid" href="https://www.youtube.com/watch?v=wwDNJlBwNhA" target="_blank" rel="noopener"><span class="play"></span>看示範<span class="src">康柏體能訓練中心 · 0:20</span></a></div>
+      </li>
+    </ol>
+  </div>
+
+  <div class="cool">
+    <h4>收操 5 分鐘 · 每個伸展 30–45 秒</h4>
+    <ul class="mini">
+      <li><span>腿後肌伸展</span><a href="https://www.youtube.com/watch?v=-r7rMzQ1Kvo" target="_blank" rel="noopener">▶ 0:50</a></li>
+      <li><span>背闊肌伸展</span><a href="https://www.youtube.com/watch?v=Vr9m4mgrAHo" target="_blank" rel="noopener">▶ 1:12</a></li>
+      <li><span>躺姿梨狀肌伸展（4 字）</span><a href="https://www.youtube.com/watch?v=NbGzZEDyyWI" target="_blank" rel="noopener">▶ 0:53</a></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= DAY C ================= -->
+<section id="day-c" class="day-c">
+  <div class="sec-head">
+    <div class="plate yellow"><div><span>C</span><small>週五</small></div></div>
+    <div><h2>C 臥推日</h2><p>水平推 ＋ 腿推 ＋ 臀 · 約 55 分鐘</p></div>
+  </div>
+
+  <div class="block">
+    <div class="block-head"><span class="letter">A</span><h4>主項</h4><span class="t">組間休息 2–3 分鐘</span></div>
+    <ol class="exlist">
+      <li class="ex">
+        <div class="ex-top"><span class="ex-no">A</span><div class="ex-title"><h3>槓鈴臥推</h3><span class="en">Barbell Bench Press</span></div><label class="tick"><input type="checkbox" id="c-c1" aria-label="完成：槓鈴臥推"><span></span></label></div>
+        <div class="rx"><span><b class="wk" data-w1="3 × 8" data-w2="4 × 6–8" data-w3="4 × 6–8" data-w4="3 × 5">3 × 8</b></span><span>休息 2–3 分</span></div>
+        <p class="cue">肩胛骨往後下夾緊、雙腳踩穩，槓下放到胸口下緣，手肘約 45–70 度。推起時想像把身體推離槓。</p>
+        <p class="note"><span class="tag">45+</span>沒人保護時一定要設安全槓，或改用史密斯機。肩膀前側會痛，就把握距縮窄一點，或改成啞鈴臥推。</p>
+        <div class="links"><a class="vid" href="https://www.youtube.com/watch?v=VknFj7_shiA" target="_blank" rel="noopener"><span class="play"></span>看示範<span class="src">健人蓋伊 · 7:41</span></a></div>
+      </li>
+    </ol>
+  </div>
+
+  <div class="block">
+    <div class="block-head"><span class="letter">B</span><h4>次要複合動作</h4><span class="t">組間休息 90 秒</span></div>
+    <ol class="exlist">
+      <li class="ex">
+        <div class="ex-top"><span class="ex-no">B</span><div class="ex-title"><h3>腿推</h3><span class="en">Leg Press</span></div><label class="tick"><input type="checkbox" id="c-c2" aria-label="完成：腿推"><span></span></label></div>
+        <div class="rx"><span><b class="wk" data-w1="2 × 12" data-w2="3 × 10–12" data-w3="3 × 10–12" data-w4="2 × 10">2 × 12</b></span><span>休息 90 秒</span></div>
+        <p class="cue">雙腳與肩同寬踩在踏板中間，下放到膝蓋約 90 度、下背不離開椅背，推起時膝蓋不要鎖死。不用擔心平衡，可以把大腿練得很徹底。</p>
+        <div class="links"><a class="vid" href="https://www.youtube.com/watch?v=G4BiEtmL2pA" target="_blank" rel="noopener"><span class="play"></span>看示範<span class="src">Sun · 3:08</span></a></div>
+      </li>
+    </ol>
+  </div>
+
+  <div class="block">
+    <div class="block-head"><span class="letter">C</span><h4>超級組：C1 → C2</h4><span class="t">一輪後休息 60–75 秒</span></div>
+    <ol class="exlist">
+      <li class="ex">
+        <div class="ex-top"><span class="ex-no">C1</span><div class="ex-title"><h3>單臂啞鈴划船</h3><span class="en">One-Arm Dumbbell Row</span></div><label class="tick"><input type="checkbox" id="c-c3" aria-label="完成：單臂啞鈴划船"><span></span></label></div>
+        <div class="rx"><span><b class="wk" data-w1="2 × 10 /側" data-w2="3 × 10–12 /側" data-w3="3 × 10–12 /側" data-w4="2 × 10 /側">2 × 10 /側</b></span></div>
+        <p class="cue">同側手和膝撐在臥推椅上，背打平。手肘往後口袋的方向拉，頂點停 1 秒。</p>
+        <div class="links"><a class="vid" href="https://www.youtube.com/watch?v=wc4GX0jM4l4" target="_blank" rel="noopener"><span class="play"></span>看示範<span class="src">RobertPIG蘿蔔豬 · 1:19</span></a></div>
+      </li>
+      <li class="ex">
+        <div class="ex-top"><span class="ex-no">C2</span><div class="ex-title"><h3>槓鈴臀推</h3><span class="en">Barbell Hip Thrust</span></div><label class="tick"><input type="checkbox" id="c-c4" aria-label="完成：槓鈴臀推"><span></span></label></div>
+        <div class="rx"><span><b class="wk" data-w1="2 × 10" data-w2="3 × 10–12" data-w3="3 × 10–12" data-w4="2 × 10">2 × 10</b></span></div>
+        <p class="cue">上背靠在臥推椅邊緣，槓放在髖部並墊上護墊。用臀部把骨盆推高到身體成一直線，頂點夾臀停 1 秒，不要拱腰。</p>
+        <div class="links"><a class="vid" href="https://www.youtube.com/watch?v=JjPLQyCKtnQ" target="_blank" rel="noopener"><span class="play"></span>看示範<span class="src">林勁瑋 · 5:43</span></a></div>
+      </li>
+    </ol>
+  </div>
+
+  <div class="block">
+    <div class="block-head"><span class="letter">D</span><h4>超級組：D1 → D2</h4><span class="t">一輪後休息 45–60 秒</span></div>
+    <ol class="exlist">
+      <li class="ex">
+        <div class="ex-top"><span class="ex-no">D1</span><div class="ex-title"><h3>滑輪夾胸</h3><span class="en">Cable Fly</span></div><label class="tick"><input type="checkbox" id="c-c5" aria-label="完成：滑輪夾胸"><span></span></label></div>
+        <div class="rx"><span><b class="wk" data-w1="2 × 15" data-w2="3 × 12–15" data-w3="3 × 12–15 末組力竭" data-w4="2 × 12">2 × 15</b></span></div>
+        <p class="cue">滑輪調到肩膀高度，手肘微彎固定，像抱大樹一樣往身體前方合起來，頂點擠壓胸肌 1 秒。</p>
+        <div class="links"><a class="vid" href="https://www.youtube.com/watch?v=Vezzqyjgd0k" target="_blank" rel="noopener"><span class="play"></span>看示範<span class="src">林勁瑋 · 7:26</span></a></div>
+      </li>
+      <li class="ex">
+        <div class="ex-top"><span class="ex-no">D2</span><div class="ex-title"><h3>啞鈴彎舉</h3><span class="en">Dumbbell Curl</span></div><label class="tick"><input type="checkbox" id="c-c6" aria-label="完成：啞鈴彎舉"><span></span></label></div>
+        <div class="rx"><span><b class="wk" data-w1="2 × 12" data-w2="3 × 10–12" data-w3="3 × 10–12 末組力竭" data-w4="2 × 10">2 × 12</b></span></div>
+        <p class="cue">手肘固定在身體兩側，往上彎舉時掌心轉向上，放下時慢慢控制，不要甩身體。</p>
+        <div class="links"><a class="vid" href="https://www.youtube.com/watch?v=7Xbh_w-EhYA" target="_blank" rel="noopener"><span class="play"></span>看示範<span class="src">Kun阿錕 · 2:53</span></a></div>
+      </li>
+    </ol>
+  </div>
+
+  <div class="block">
+    <div class="block-head"><span class="letter">E</span><h4>核心</h4><span class="t">組間休息 45 秒</span></div>
+    <ol class="exlist">
+      <li class="ex">
+        <div class="ex-top"><span class="ex-no">E</span><div class="ex-title"><h3>滑輪跪姿捲腹</h3><span class="en">Kneeling Cable Crunch</span></div><label class="tick"><input type="checkbox" id="c-c7" aria-label="完成：滑輪跪姿捲腹"><span></span></label></div>
+        <div class="rx"><span><b class="wk" data-w1="2 × 12" data-w2="3 × 12–15" data-w3="3 × 12–15" data-w4="2 × 12">2 × 12</b></span></div>
+        <p class="cue">跪在滑輪前，雙手抓繩索放在頭兩側。用腹肌把胸口往骨盆捲，屁股不要往後坐。</p>
+        <div class="links"><a class="vid" href="https://www.youtube.com/watch?v=yVERpE7EssE" target="_blank" rel="noopener"><span class="play"></span>看示範<span class="src">河馬力士運動館 · 0:20</span></a></div>
+      </li>
+    </ol>
+  </div>
+
+  <div class="cool">
+    <h4>收操 5 分鐘 · 每個伸展 30–45 秒</h4>
+    <ul class="mini">
+      <li><span>跪姿髖屈肌伸展</span><a href="https://www.youtube.com/watch?v=dQAE29xW2lQ" target="_blank" rel="noopener">▶ 0:22</a></li>
+      <li><span>胸大肌伸展（門框）</span><a href="https://www.youtube.com/watch?v=E5HTUT0AlVw" target="_blank" rel="noopener">▶ 2:31</a></li>
+      <li><span>腿後肌伸展</span><a href="https://www.youtube.com/watch?v=-r7rMzQ1Kvo" target="_blank" rel="noopener">▶ 0:50</a></li>
+    </ul>
+  </div>
+
+  <div class="box info">
+    <h3>選做：5 分鐘代謝收尾（三天都可以加）</h3>
+    <p>練完還有時間、想多消耗一點熱量時做，放在收操之前。這是短時間高強度的肌力循環，不是慢跑。第 4 週減量週不做。</p>
+    <ul class="mini">
+      <li><span><b>壺鈴擺盪</b>：每分鐘開始時做 15 下，剩下的時間休息，共 5 分鐘</span><a href="https://www.youtube.com/watch?v=t7_N0nQqK6c" target="_blank" rel="noopener">▶ 8:09</a></li>
+      <li><span><b>雪橇推</b>：20 公尺 × 5 趟，走回起點就是休息</span><a href="https://www.youtube.com/watch?v=w_GuoPFQs8c" target="_blank" rel="noopener">▶ 3:52</a></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= MONTH ================= -->
+<section id="month">
+  <div class="sec-head">
+    <div><h2>第 1 個月：4 週進程</h2><p>動作固定不變，用組數、次數和保留次數（RIR）調整強度</p></div>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>週次</th><th>主項（A）</th><th>次要複合（B）</th><th>超級組與核心</th><th>強度</th><th>這週的重點</th></tr></thead>
+      <tbody>
+        <tr data-row="1"><td><b>第 1 週</b><br>適應</td><td><span class="num">3 × 8</span></td><td><span class="num">2 × 10</span></td><td><span class="num">2 組</span>，取次數上限</td><td><span class="num">RIR 3</span></td><td>找出每個動作的工作重量並記下來，動作品質優先。</td></tr>
+        <tr data-row="2"><td><b>第 2 週</b><br>累積</td><td><span class="num">4 × 6–8</span></td><td><span class="num">3 × 8–10</span></td><td><span class="num">3 組</span></td><td><span class="num">RIR 2</span></td><td>用第 1 週的重量，每組盡量多做 1–2 下。</td></tr>
+        <tr data-row="3"><td><b>第 3 週</b><br>推進</td><td><span class="num">4 × 6–8</span></td><td><span class="num">3 × 8–10</span></td><td><span class="num">3 組</span>，孤立動作末組力竭</td><td><span class="num">RIR 1–2</span></td><td>上週次數做到範圍上限的動作，這週加重。</td></tr>
+        <tr data-row="4"><td><b>第 4 週</b><br>減量</td><td><span class="num">3 × 5</span>，用第 3 週重量的 90%</td><td><span class="num">2 × 8</span></td><td><span class="num">2 組</span></td><td><span class="num">RIR 4</span></td><td>組數少約 4 成，讓關節和神經系統恢復，第 2 個月才能練得更重。</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="two">
+    <div class="box info">
+      <h3>加重規則：雙重漸進</h3>
+      <p>每個動作都有次數範圍，例如 6–8 下。當<b>所有組</b>都做到範圍上限，而且還保留著當週的 RIR，下一次就加重，次數回到下限重新累積。</p>
+      <ul>
+        <li>深蹲、硬舉、腿推：加 <span class="num">5</span> 公斤</li>
+        <li>臥推、臀推：加 <span class="num">2.5</span> 公斤</li>
+        <li>啞鈴動作：換下一個重量（多 <span class="num">1–2</span> 公斤）</li>
+        <li>滑輪與器械：加 <span class="num">1</span> 格</li>
+      </ul>
+    </div>
+    <div class="box info">
+      <h3>RIR 是什麼</h3>
+      <p>Reps In Reserve，做完一組時「還能再做幾下」。RIR 2 就是停在還能再做 2 下的地方。主項（深蹲、硬舉、臥推）整個月都不做到力竭，受傷風險低、恢復也快。</p>
+      <div class="links"><a class="vid" href="https://www.youtube.com/watch?v=DFDeBiXQhvE" target="_blank" rel="noopener"><span class="play"></span>RIR 怎麼用<span class="src">白天手術房晚上健身房 · 7:02</span></a></div>
+    </div>
+  </div>
+
+  <div class="box info">
+    <h3>每週每個肌群的直接訓練組數（第 2–3 週）</h3>
+    <p class="hint">增肌常見的建議是每個肌群每週 10–20 組。第 1 個月先從下限開始，第 2 個月再依恢復狀況往上加。</p>
+    <div class="tbl-wrap">
+      <table class="vol">
+        <thead><tr><th>肌群</th><th>組數</th><th>來自哪些動作</th></tr></thead>
+        <tbody>
+          <tr><td>背</td><td>13</td><td>引體向上 4、坐姿划船 3、單臂划船 3、面拉 3</td></tr>
+          <tr><td>胸</td><td>10</td><td>槓鈴臥推 4、上斜啞鈴臥推 3、滑輪夾胸 3</td></tr>
+          <tr><td>大腿前側</td><td>10</td><td>背蹲 4、腿推 3、分腿蹲 3</td></tr>
+          <tr><td>臀與大腿後側</td><td>10</td><td>六角槓硬舉 4、臀推 3、腿彎舉 3（另有分腿蹲）</td></tr>
+          <tr><td>肩</td><td>9</td><td>肩推 3、側平舉 3、面拉 3（另有臥推類）</td></tr>
+          <tr><td>手臂</td><td>9</td><td>二頭 6、三頭 3（三頭另外在所有推的動作中出力）</td></tr>
+          <tr><td>核心</td><td>9</td><td>懸吊抬腿 3、農夫走路 3、滑輪捲腹 3</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="two">
+    <div class="box warn">
+      <h3>45 歲以後的訓練原則</h3>
+      <ul>
+        <li>熱身組不能省，越重的日子越要做足</li>
+        <li>主項保留 1–2 下，孤立動作才在第 3 週做到力竭</li>
+        <li>關節痛就換變化式：背蹲換安全槓深蹲或腿推、槓鈴臥推換啞鈴、傳統硬舉換六角槓或羅馬尼亞硬舉</li>
+        <li>兩次主項都退步、睡不好、關節持續痠痛，就提前進入減量週</li>
+        <li>有高血壓、心血管疾病或正在服藥，先跟醫師確認</li>
+      </ul>
+    </div>
+    <div class="box info">
+      <h3>減量週為什麼重要</h3>
+      <p>肌肉恢復得快，肌腱、關節和神經系統比較慢。每 4–6 週減量一次，下個月才練得上去。如果第 4 週狀態很好、睡眠充足，也可以延後一週再減量。</p>
+      <div class="links"><a class="vid" href="https://www.youtube.com/watch?v=y1TYQFUxVZs" target="_blank" rel="noopener"><span class="play"></span>減量週怎麼排<span class="src">林勁瑋 · 4:35</span></a></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOD ================= -->
+<section id="food">
+  <div class="sec-head">
+    <div><h2>飲食與恢復</h2><p>增肌減脂的結果，大半由訓練以外的時間決定</p></div>
+  </div>
+  <div class="two">
+    <div class="box info">
+      <h3>熱量：小幅赤字</h3>
+      <p>每天比維持熱量少吃 <span class="fmla">300–500</span> 大卡。目標是每週體重下降約體重的 <span class="fmla">0.25–0.5%</span>，掉太快會連肌肉一起掉。</p>
+      <p class="hint">例：75 公斤的人，每週減 0.2–0.4 公斤就是理想速度。</p>
+    </div>
+    <div class="box info">
+      <h3>蛋白質：每天每公斤體重 1.6–2.2 克</h3>
+      <p>例：75 公斤 → 每天 <span class="fmla">120–165</span> 克，分成 3–4 餐，每餐 30–40 克。45 歲以後肌肉合成效率下降，每餐吃夠比一天總量更重要。</p>
+    </div>
+    <div class="box info">
+      <h3>碳水、睡眠、步數</h3>
+      <ul>
+        <li>碳水集中在訓練前後兩餐</li>
+        <li>每晚睡 7–8 小時，睡不夠會同時影響增肌和食慾</li>
+        <li>每天走 8,000 步以上。這不是有氧課表，但日常活動量對減脂的影響比想像中大</li>
+      </ul>
+    </div>
+    <div class="box info">
+      <h3>怎麼知道有效</h3>
+      <ul>
+        <li>體重：每天早上空腹量，看<b>一週平均</b>，不看單日</li>
+        <li>腰圍：每 2 週量一次，量肚臍高度</li>
+        <li>照片：每 4 週拍正面、側面、背面</li>
+        <li>訓練紀錄：每個動作記下重量 × 次數</li>
+      </ul>
+      <p><b>腰圍變小、主項重量上升</b>，就是增肌減脂正在發生。體重掉很快但力量一直退步，代表吃太少。</p>
+    </div>
+  </div>
+  <div class="box info">
+    <h3>延伸觀看</h3>
+    <ul class="mini">
+      <li><span>增肌減脂其實超簡單，但 90% 的人都做錯了（楷教練）</span><a href="https://www.youtube.com/watch?v=apG0dku9bSk" target="_blank" rel="noopener">▶ 11:34</a></li>
+      <li><span>增肌減脂可能同時做到嗎？（營養師 Ricky）</span><a href="https://www.youtube.com/watch?v=4XaW3z9iMWM" target="_blank" rel="noopener">▶ 19:28</a></li>
+      <li><span>蛋白質沒吃夠，減脂等於白忙一場（林勁瑋）</span><a href="https://www.youtube.com/watch?v=RH1Z0WJ_tXc" target="_blank" rel="noopener">▶ 14:30</a></li>
+    </ul>
+  </div>
+</section>
+
+</main>
+
+<footer class="wrap">
+  <p>示範影片都是 YouTube 公開影片，大多來自台灣教練與物理治療師頻道。</p>
+  <p>本計畫是一般健身建議，不能取代醫師的個別評估。週次選擇和勾選紀錄只存在你自己的瀏覽器裡。</p>
+</footer>
+
+<script>
+(function(){
+  var WEEKS = {
+    1: { title: '第 1 週 · 適應週', rir: 'RIR 3', items: [
+      '每組做完都還能再做 3 下（RIR 3），先別拚重量。',
+      '主項做 3 組，其他動作做組數下限。',
+      '找出每個動作的工作重量並記下來。新課表的第一週會比較痠，正常。'
+    ]},
+    2: { title: '第 2 週 · 累積週', rir: 'RIR 2', items: [
+      '組數回到完整：主項 4 組、其他動作 3 組。',
+      '沿用第 1 週的重量，每組盡量多做 1–2 下。',
+      '想加選做的代謝收尾，從這週開始。'
+    ]},
+    3: { title: '第 3 週 · 推進週', rir: 'RIR 1–2', items: [
+      '上週所有組都做到次數上限的動作，這週加重。',
+      '孤立動作（腿彎舉、側平舉、三頭、二頭、夾胸）最後一組做到力竭。',
+      '主項仍然保留 1 下以上，不做到力竭。'
+    ]},
+    4: { title: '第 4 週 · 減量週', rir: 'RIR 4', items: [
+      '組數減少約 4 成，主項重量用第 3 週的 90%。',
+      '動作要做得很輕鬆、很漂亮，不做代謝收尾。',
+      '這週不是偷懶，是為了第 2 個月練得更重。'
+    ]}
+  };
+  var KEY_W = 'rc-week-v1', KEY_C = 'rc-checks-v1';
+  var buttons = Array.prototype.slice.call(document.querySelectorAll('.weeks button'));
+  var figures = Array.prototype.slice.call(document.querySelectorAll('.wk[data-w1]'));
+  var rows = Array.prototype.slice.call(document.querySelectorAll('tr[data-row]'));
+  var calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function setWeek(n, animate){
+    var w = WEEKS[n];
+    buttons.forEach(function(b){ b.setAttribute('aria-pressed', String(b.dataset.week === String(n))); });
+    figures.forEach(function(el){
+      var v = el.getAttribute('data-w' + n);
+      if (v && el.textContent !== v){
+        el.textContent = v;
+        if (animate && !calm){ el.classList.add('flash'); setTimeout(function(){ el.classList.remove('flash'); }, 600); }
+      }
+    });
+    rows.forEach(function(r){ r.classList.toggle('cur', r.dataset.row === String(n)); });
+    document.getElementById('wk-title').textContent = w.title;
+    document.getElementById('wk-rir').textContent = w.rir;
+    var list = document.getElementById('wk-list');
+    list.innerHTML = '';
+    w.items.forEach(function(t){ var li = document.createElement('li'); li.textContent = t; list.appendChild(li); });
+    try { localStorage.setItem(KEY_W, String(n)); } catch (e) {}
+  }
+  buttons.forEach(function(b){ b.addEventListener('click', function(){ setWeek(Number(b.dataset.week), true); }); });
+  var saved = 1;
+  try { saved = Number(localStorage.getItem(KEY_W)) || 1; } catch (e) {}
+  setWeek(WEEKS[saved] ? saved : 1, false);
+
+  // per-session checkboxes
+  var boxes = Array.prototype.slice.call(document.querySelectorAll('.ex input[type=checkbox]'));
+  var state = {};
+  try { state = JSON.parse(localStorage.getItem(KEY_C) || '{}') || {}; } catch (e) { state = {}; }
+  function save(){ try { localStorage.setItem(KEY_C, JSON.stringify(state)); } catch (e) {} }
+  function paint(){ boxes.forEach(function(b){ var li = b.closest('.ex'); if (li) li.classList.toggle('done', b.checked); }); }
+  boxes.forEach(function(b){
+    b.checked = !!state[b.id];
+    b.addEventListener('change', function(){ if (b.checked) state[b.id] = 1; else delete state[b.id]; save(); paint(); });
+  });
+  document.getElementById('resetBtn').addEventListener('click', function(){
+    state = {}; boxes.forEach(function(b){ b.checked = false; }); save(); paint();
+  });
+  paint();
+
+  // Scroll in-page links by script so they also work inside embeds (e.g. Google Sites).
+  document.addEventListener('click', function(e){
+    var a = e.target.closest && e.target.closest('a[href^="#"]');
+    if (!a) return;
+    var target = document.getElementById(a.getAttribute('href').slice(1));
+    if (!target) return;
+    e.preventDefault();
+    target.scrollIntoView({ behavior: calm ? 'auto' : 'smooth', block: 'start' });
+  });
+})();
+</script>
+</body>
+</html>
